@@ -8,8 +8,8 @@ description = "High-level interface for easy calculation of checksum digest for 
 readme = ".cargo/README.md"
 repository = "https://github.com/ferric-bytes/chksum"
 license = "MIT"
-keywords = []
-categories = []
+keywords = ["checksum", "directory-checksum", "file-checksum", "hash"]
+categories = ["algorithms", "cryptography", "filesystem"]
 
 [package.metadata.docs.rs]
 all-features = true
