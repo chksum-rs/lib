@@ -208,7 +208,7 @@ jobs:
         with:
           crate: cargo-tarpaulin
       - name: Run cargo tarpaulin
-        run: cargo tarpaulin --all-features --fail-under 50 --ignore-tests --out xml --timeout 120
+        run: cargo tarpaulin --all-features --engine llvm --fail-under 50 --ignore-tests --out xml --timeout 120
       - name: Upload to codecov.io
         if: ${{ always() }}
         uses: codecov/codecov-action@v3
