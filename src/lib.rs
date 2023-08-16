@@ -320,10 +320,7 @@ where
 
     #[cfg_attr(all(release, feature = "inline"), inline)]
     fn chksum_with(data: File, args: &Args) -> result::Result<Self::Digest, Self::Error> {
-        let hash = Self::default();
-        let ReadChksumer { hash, .. } = ReadChksumer { hash, args }.update(data)?;
-        let digest = hash.digest();
-        Ok(digest)
+        Self::chksum_with(&data, args)
     }
 }
 
