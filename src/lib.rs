@@ -365,10 +365,7 @@ where
 
     #[cfg_attr(all(release, feature = "inline"), inline)]
     fn chksum_with(data: PathBuf, args: &Args) -> result::Result<Self::Digest, Self::Error> {
-        let hash = Self::default();
-        let PathChksumer { hash, .. } = PathChksumer { hash, args }.update(data)?;
-        let digest = hash.digest();
-        Ok(digest)
+        Self::chksum_with(&data, args)
     }
 }
 
@@ -380,10 +377,7 @@ where
 
     #[cfg_attr(all(release, feature = "inline"), inline)]
     fn chksum_with(data: &PathBuf, args: &Args) -> result::Result<Self::Digest, Self::Error> {
-        let hash = Self::default();
-        let PathChksumer { hash, .. } = PathChksumer { hash, args }.update(data)?;
-        let digest = hash.digest();
-        Ok(digest)
+        Self::chksum_with(data.as_path(), args)
     }
 }
 
