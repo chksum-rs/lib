@@ -1,5 +1,6 @@
-use std::io::{self, BufRead, BufReader, Read};
+use std::io::{BufRead, BufReader, Read};
 
+use crate::error::Error;
 use crate::hash::Update;
 use crate::{Args, Chksumer};
 
@@ -17,7 +18,7 @@ where
     T: Update,
     U: Read,
 {
-    type Error = io::Error;
+    type Error = Error;
 
     fn update(mut self, data: U) -> Result<Self, Self::Error> {
         let Self { mut hash, args } = self;

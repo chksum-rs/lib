@@ -1,8 +1,10 @@
 use std::fs::{read_dir, File};
-use std::io;
 use std::path::Path;
 
+use is_terminal::IsTerminal;
+
 use crate::directory::ReadDirChksumer;
+use crate::error::Error;
 use crate::hash::Update;
 use crate::read::ReadChksumer;
 use crate::{Args, Chksumer};
@@ -21,7 +23,7 @@ where
     T: Update,
     U: AsRef<Path>,
 {
-    type Error = io::Error;
+    type Error = Error;
 
     #[inline]
     fn update(mut self, data: U) -> Result<Self, Self::Error> {
@@ -35,6 +37,9 @@ where
         } else {
             // if not a directory then treat as a file
             let file = File::open(data)?;
+            if file.is_terminal() {
+                return Err(Error::IsTerminal);
+            }
             let Self { hash, args } = self;
             let ReadChksumer { hash, args } = ReadChksumer { hash, args }.update(file)?;
             self = Self { hash, args };

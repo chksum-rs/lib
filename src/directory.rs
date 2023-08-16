@@ -1,6 +1,7 @@
 use std::fs::{DirEntry, ReadDir};
 use std::io;
 
+use crate::error::Error;
 use crate::hash::Update;
 use crate::path::PathChksumer;
 use crate::{Args, Chksumer};
@@ -18,7 +19,7 @@ impl<'a, T> Chksumer<DirEntry> for DirEntryChksumer<'a, T>
 where
     T: Update,
 {
-    type Error = io::Error;
+    type Error = Error;
 
     #[inline]
     fn update(mut self, data: DirEntry) -> Result<Self, Self::Error> {
@@ -43,7 +44,7 @@ impl<'a, T> Chksumer<ReadDir> for ReadDirChksumer<'a, T>
 where
     T: Update,
 {
-    type Error = io::Error;
+    type Error = Error;
 
     #[inline]
     fn update(mut self, data: ReadDir) -> Result<Self, Self::Error> {

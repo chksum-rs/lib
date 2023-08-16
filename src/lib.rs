@@ -326,6 +326,9 @@ where
 
     #[inline]
     fn chksum_with(data: &File, args: &Args) -> result::Result<Self::Digest, Self::Error> {
+        if data.is_terminal() {
+            return Err(Error::IsTerminal);
+        }
         let hash = Self::default();
         let ReadChksumer { hash, .. } = ReadChksumer { hash, args }.update(data)?;
         let digest = hash.digest();
