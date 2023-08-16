@@ -22,6 +22,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed `impl Chksum` for `PathBuf` - call method and DRY.
 - Changed `impl Chksum` for `File` - call method and DRY.
 
+### Removed
+
+- Removed build script as well as `inline` feature.
+
 ## [0.2.0] - 2023-08-12
 
 ### Added

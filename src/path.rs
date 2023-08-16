@@ -23,7 +23,7 @@ where
 {
     type Error = io::Error;
 
-    #[cfg_attr(all(release, feature = "inline"), inline)]
+    #[inline]
     fn update(mut self, data: U) -> Result<Self, Self::Error> {
         let data = data.as_ref();
         let metadata = data.metadata()?;

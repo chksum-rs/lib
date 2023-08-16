@@ -20,7 +20,7 @@ where
 {
     type Error = io::Error;
 
-    #[cfg_attr(all(release, feature = "inline"), inline)]
+    #[inline]
     fn update(mut self, data: DirEntry) -> Result<Self, Self::Error> {
         let path = data.path();
         let Self { hash, args } = self;
@@ -45,7 +45,7 @@ where
 {
     type Error = io::Error;
 
-    #[cfg_attr(all(release, feature = "inline"), inline)]
+    #[inline]
     fn update(mut self, data: ReadDir) -> Result<Self, Self::Error> {
         let Self { hash, args } = self;
         let DirEntryChksumer { hash, args } = {

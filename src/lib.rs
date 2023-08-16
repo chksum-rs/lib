@@ -247,12 +247,6 @@
 //!
 //! By default all of them are enabled.
 //!
-//! ## Compilation
-//!
-//! * `inline`: Adds `#[inline]` attribute to some methods on release build.
-//!
-//! By default all of them are enabled.
-//!
 //! # License
 //!
 //! MIT
@@ -287,7 +281,7 @@ pub trait Chksum<T>: Update {
     /// Calculates checksum of given input.
     ///
     /// Check [`chksum`] function for more details.
-    #[cfg_attr(all(release, feature = "inline"), inline)]
+    #[inline]
     fn chksum(data: T) -> result::Result<Self::Digest, Self::Error> {
         let args = Args::default();
         Self::chksum_with(data, &args)
@@ -303,7 +297,7 @@ where
 {
     type Error = Error;
 
-    #[cfg_attr(all(release, feature = "inline"), inline)]
+    #[inline]
     fn chksum_with(data: DirEntry, args: &Args) -> result::Result<Self::Digest, Self::Error> {
         let hash = Self::default();
         let DirEntryChksumer { hash, .. } = DirEntryChksumer { hash, args }.update(data)?;
@@ -318,7 +312,7 @@ where
 {
     type Error = Error;
 
-    #[cfg_attr(all(release, feature = "inline"), inline)]
+    #[inline]
     fn chksum_with(data: File, args: &Args) -> result::Result<Self::Digest, Self::Error> {
         Self::chksum_with(&data, args)
     }
@@ -330,7 +324,7 @@ where
 {
     type Error = Error;
 
-    #[cfg_attr(all(release, feature = "inline"), inline)]
+    #[inline]
     fn chksum_with(data: &File, args: &Args) -> result::Result<Self::Digest, Self::Error> {
         let hash = Self::default();
         let ReadChksumer { hash, .. } = ReadChksumer { hash, args }.update(data)?;
@@ -345,7 +339,7 @@ where
 {
     type Error = Error;
 
-    #[cfg_attr(all(release, feature = "inline"), inline)]
+    #[inline]
     fn chksum_with(data: &Path, args: &Args) -> result::Result<Self::Digest, Self::Error> {
         let hash = Self::default();
         let PathChksumer { hash, .. } = PathChksumer { hash, args }.update(data)?;
@@ -360,7 +354,7 @@ where
 {
     type Error = Error;
 
-    #[cfg_attr(all(release, feature = "inline"), inline)]
+    #[inline]
     fn chksum_with(data: PathBuf, args: &Args) -> result::Result<Self::Digest, Self::Error> {
         Self::chksum_with(&data, args)
     }
@@ -372,7 +366,7 @@ where
 {
     type Error = Error;
 
-    #[cfg_attr(all(release, feature = "inline"), inline)]
+    #[inline]
     fn chksum_with(data: &PathBuf, args: &Args) -> result::Result<Self::Digest, Self::Error> {
         Self::chksum_with(data.as_path(), args)
     }
@@ -384,7 +378,7 @@ where
 {
     type Error = Error;
 
-    #[cfg_attr(all(release, feature = "inline"), inline)]
+    #[inline]
     fn chksum_with(data: ReadDir, args: &Args) -> result::Result<Self::Digest, Self::Error> {
         let hash = Self::default();
         let ReadDirChksumer { hash, .. } = ReadDirChksumer { hash, args }.update(data)?;
@@ -399,7 +393,7 @@ where
 {
     type Error = Error;
 
-    #[cfg_attr(all(release, feature = "inline"), inline)]
+    #[inline]
     fn chksum_with(data: Stdin, args: &Args) -> result::Result<Self::Digest, Self::Error> {
         Self::chksum_with(data.lock(), args)
     }
@@ -411,7 +405,7 @@ where
 {
     type Error = Error;
 
-    #[cfg_attr(all(release, feature = "inline"), inline)]
+    #[inline]
     fn chksum_with(data: StdinLock<'a>, args: &Args) -> result::Result<Self::Digest, Self::Error> {
         if data.is_terminal() {
             let error = Error::IsTerminal;
@@ -431,21 +425,21 @@ pub struct ArgsBuilder {
 }
 
 impl ArgsBuilder {
-    #[cfg_attr(all(release, feature = "inline"), inline)]
+    #[inline]
     #[must_use]
     pub const fn new() -> Self {
         let chunk_size = None;
         Self { chunk_size }
     }
 
-    #[cfg_attr(all(release, feature = "inline"), inline)]
+    #[inline]
     #[must_use]
     pub const fn chunk_size(mut self, chunk_size: usize) -> Self {
         self.chunk_size = Some(chunk_size);
         self
     }
 
-    #[cfg_attr(all(release, feature = "inline"), inline)]
+    #[inline]
     #[must_use]
     pub const fn build(self) -> Args {
         let Self { chunk_size } = self;
@@ -454,7 +448,7 @@ impl ArgsBuilder {
 }
 
 impl Default for ArgsBuilder {
-    #[cfg_attr(all(release, feature = "inline"), inline)]
+    #[inline]
     fn default() -> Self {
         Self::new()
     }
@@ -475,7 +469,7 @@ impl Args {
 }
 
 impl Default for Args {
-    #[cfg_attr(all(release, feature = "inline"), inline)]
+    #[inline]
     fn default() -> Self {
         Self::new()
     }
@@ -587,7 +581,7 @@ where
 /// # Ok(())
 /// # }
 /// ```
-#[cfg_attr(all(release, feature = "inline"), inline)]
+#[inline]
 pub fn chksum<T, U>(data: U) -> result::Result<T::Digest, T::Error>
 where
     T: Chksum<U>,
@@ -596,7 +590,7 @@ where
 }
 
 #[doc(hidden)] // TODO: create documentation
-#[cfg_attr(all(release, feature = "inline"), inline)]
+#[inline]
 pub fn chksum_with<T, U>(data: U, args: &Args) -> result::Result<T::Digest, T::Error>
 where
     T: Chksum<U>,
