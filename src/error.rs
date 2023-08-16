@@ -3,7 +3,7 @@ use std::{io, result};
 /// A common error type for the current crate.
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
-    #[error("")]
+    #[error("cannot process terminal input")]
     IsTerminal,
     #[error(transparent)]
     Io(#[from] io::Error),
