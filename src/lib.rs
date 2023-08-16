@@ -266,7 +266,7 @@ pub(crate) mod path;
 pub(crate) mod read;
 
 use std::fs::{DirEntry, File, ReadDir};
-use std::io::StdinLock;
+use std::io::{Stdin, StdinLock};
 use std::path::{Path, PathBuf};
 use std::result;
 
@@ -390,6 +390,18 @@ where
         let ReadDirChksumer { hash, .. } = ReadDirChksumer { hash, args }.update(data)?;
         let digest = hash.digest();
         Ok(digest)
+    }
+}
+
+impl<T> Chksum<Stdin> for T
+where
+    T: Default + Update,
+{
+    type Error = Error;
+
+    #[cfg_attr(all(release, feature = "inline"), inline)]
+    fn chksum_with(data: Stdin, args: &Args) -> result::Result<Self::Digest, Self::Error> {
+        Self::chksum_with(data.lock(), args)
     }
 }
 
