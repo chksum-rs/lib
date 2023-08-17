@@ -273,7 +273,7 @@ use crate::hash::Update;
 use crate::path::PathChksumer;
 use crate::read::ReadChksumer;
 
-/// A trait for objects which are able to be checksumable.
+/// A trait for objects which are able to calculate checksum of given input.
 pub trait Chksum<T>: Update {
     /// The type of the returned error.
     type Error;

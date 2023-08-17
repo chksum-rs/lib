@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed missing keywords and categories in `Cargo.toml`.
 - Fixed missing `Error::IsTerminal` error message.
 - Fixed file handling (error is returned when file is terminal).
+- Fixed doc description for `Chksum` trait.
 
 ### Changed
 
