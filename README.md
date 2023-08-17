@@ -5,7 +5,7 @@
 [![docs.rs](https://img.shields.io/docsrs/chksum?style=flat-square&logo=docsdotrs "docs.rs")](https://docs.rs/chksum)
 [![Coverage](https://img.shields.io/codecov/c/gh/ferric-bytes/chksum?style=flat-square&logo=codecov "Coverage")](https://app.codecov.io/gh/ferric-bytes/chksum)
 [![MSRV](https://img.shields.io/badge/MSRV-1.65.0-informational?style=flat-square "MSRV")](https://github.com/ferric-bytes/chksum/blob/master/Cargo.toml)
-[![deps.rs](https://deps.rs/crate/chksum/0.2.0/status.svg?style=flat-square "deps.rs")](https://deps.rs/crate/chksum/0.2.0)
+[![deps.rs](https://deps.rs/crate/chksum/0.2.1/status.svg?style=flat-square "deps.rs")](https://deps.rs/crate/chksum/0.2.1)
 [![unsafe forbidden](https://img.shields.io/badge/unsafe-forbidden-success.svg?style=flat-square "unsafe forbidden")](https://github.com/rust-secure-code/safety-dance)
 [![LICENSE](https://img.shields.io/github/license/ferric-bytes/chksum?style=flat-square "LICENSE")](https://github.com/ferric-bytes/chksum/blob/master/LICENSE)
 
@@ -25,7 +25,7 @@ Add the following entry to the `dependencies` section of your `Cargo.toml` file:
 ```toml
 [dependencies]
 # ...
-chksum = "0.2.0"
+chksum = "0.2.1"
 ```
 
 Alternatively, you can use the [`cargo add`](https://doc.rust-lang.org/cargo/commands/cargo-add.html) subcommand:
