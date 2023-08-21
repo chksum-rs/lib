@@ -16,7 +16,7 @@ all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
 
 [dependencies]
-chksum-hash = { version = "0.4.1", default-features = false, features = ["error"] }
+chksum-hash = { version = "0.4.3", default-features = false, features = ["error"] }
 is-terminal = "0.4.9"
 thiserror = "1.0.44"
 
@@ -25,7 +25,17 @@ assert_fs = "1.0.13"
 thiserror = "1.0.44"
 
 [features]
-default = ["md5", "sha1", "sha2"]
+default = [
+    # algorithms
+    "md5",
+    "sha1",
+    "sha2",
+]
+
+# compilation
+unstable = ["chksum-hash/unstable"]
+
+# algorithms
 md5 = ["chksum-hash/md5"]
 sha1 = ["chksum-hash/sha1"]
 sha2 = ["sha2-224", "sha2-256", "sha2-384", "sha2-512", "chksum-hash/sha2"]

@@ -247,6 +247,12 @@
 //!
 //! By default all of them are enabled.
 //!
+//! ## Compilation
+//!
+//! * `unstable`: Enables unstable options (like build script).
+//!
+//! By default none of them are enabled.
+//!
 //! # License
 //!
 //! MIT
