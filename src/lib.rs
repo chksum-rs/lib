@@ -7,7 +7,7 @@
 //! ```toml
 //! [dependencies]
 //! # ...
-//! chksum = "0.2.1"
+//! chksum = "0.2.2"
 //! ```
 //!
 //! Alternatively use [`cargo add`](https://doc.rust-lang.org/cargo/commands/cargo-add.html) subcommand.
