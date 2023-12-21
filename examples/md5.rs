@@ -1,8 +1,7 @@
 use std::env;
 use std::path::PathBuf;
 
-use chksum::hash::MD5;
-use chksum::{chksum, Result};
+use chksum::{chksum, Result, MD5};
 
 fn main() -> Result<()> {
     // Skip the first argument because it is not necessary to calculate digest of the binary itself
@@ -11,7 +10,7 @@ fn main() -> Result<()> {
         let path = PathBuf::from(arg);
 
         // Calculate digest
-        let digest = chksum::<MD5, _>(&path)?;
+        let digest = chksum::<MD5>(&path)?;
 
         // Print digest
         let path = path.display();

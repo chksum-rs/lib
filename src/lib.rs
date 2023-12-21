@@ -1,40 +1,150 @@
-//! High-level interface for easy calculation of checksum digest for files, directories, stdin and more.
+//! This crate provides an implementation of various hash functions with a straightforward interface for computing digests of bytes, files, directories, and more.
+//!
+//! For a low-level interface, you can explore the [`chksum_hash`] crate.
 //!
 //! # Setup
 //!
-//! Update your `Cargo.toml` by adding entry to `dependencies` section.
+//! To use this crate, add the following entry to your `Cargo.toml` file in the `dependencies` section:
 //!
 //! ```toml
 //! [dependencies]
-//! # ...
-//! chksum = "0.2.2"
+//! chksum = "0.3.0"
 //! ```
 //!
-//! Alternatively use [`cargo add`](https://doc.rust-lang.org/cargo/commands/cargo-add.html) subcommand.
+//! Alternatively, you can use the [`cargo add`](https://doc.rust-lang.org/cargo/commands/cargo-add.html) subcommand:
 //!
 //! ```sh
 //! cargo add chksum
-//! ```
+//! ```     
 //!
 //! # Usage
 //!
-//! ## File
-//!
-//! Use [`File`](std::fs::File) or [`&File`](std::fs::File) as an input.
+//! Use the [`chksum`] function to calcualate digest of file, directory and so on.
 //!
 //! ```rust
-//! # use std::fs::File;
 //! # use std::path::Path;
+//! use std::fs::File;
+//!
 //! # use chksum::Result;
-//! use chksum::chksum;
-//! use chksum::hash::MD5;
+//! use chksum::sha2_256;
 //!
 //! # fn wrapper(path: &Path) -> Result<()> {
 //! let file = File::open(path)?;
-//! let digest = chksum::<MD5, _>(file)?;
+//! let digest = sha2_256::chksum(file)?;
 //! assert_eq!(
 //!     digest.to_hex_lowercase(),
-//!     "b35e02f32d924c3da7ca8613ea91deb0"
+//!     "44752f37272e944fd2c913a35342eaccdd1aaf189bae50676b301ab213fc5061"
+//! );
+//! # Ok(())
+//! # }
+//! ```
+//!
+//! # Input Types
+//!
+//! ## Bytes
+//!
+//! ### Array
+//!
+//! ```rust
+//! # use chksum::Result;
+//! use chksum::sha2_256;
+//!
+//! # fn wrapper() -> Result<()> {
+//! let data = [0, 1, 2, 3];
+//! let digest = sha2_256::chksum(data)?;
+//! assert_eq!(
+//!     digest.to_hex_lowercase(),
+//!     "44752f37272e944fd2c913a35342eaccdd1aaf189bae50676b301ab213fc5061"
+//! );
+//! # Ok(())
+//! # }
+//! ```
+//!
+//! ### Vec
+//!
+//! ```rust
+//! # use chksum::Result;
+//! use chksum::sha2_256;
+//!
+//! # fn wrapper() -> Result<()> {
+//! let data = vec![0, 1, 2, 3];
+//! let digest = sha2_256::chksum(data)?;
+//! assert_eq!(
+//!     digest.to_hex_lowercase(),
+//!     "44752f37272e944fd2c913a35342eaccdd1aaf189bae50676b301ab213fc5061"
+//! );
+//! # Ok(())
+//! # }
+//! ```
+//!
+//! ### Slice
+//!
+//! ```rust
+//! # use chksum::Result;
+//! use chksum::sha2_256;
+//!
+//! # fn wrapper() -> Result<()> {
+//! let data = &[0, 1, 2, 3];
+//! let digest = sha2_256::chksum(data)?;
+//! assert_eq!(
+//!     digest.to_hex_lowercase(),
+//!     "44752f37272e944fd2c913a35342eaccdd1aaf189bae50676b301ab213fc5061"
+//! );
+//! # Ok(())
+//! # }
+//! ```
+//!
+//! ## Strings
+//!
+//! ### str
+//!
+//! ```rust
+//! # use chksum::Result;
+//! use chksum::sha2_256;
+//!
+//! # fn wrapper() -> Result<()> {
+//! let data = "&str";
+//! let digest = sha2_256::chksum(data)?;
+//! assert_eq!(
+//!     digest.to_hex_lowercase(),
+//!     "44752f37272e944fd2c913a35342eaccdd1aaf189bae50676b301ab213fc5061"
+//! );
+//! # Ok(())
+//! # }
+//! ```
+//!
+//! ### String
+//!
+//! ```rust
+//! # use chksum::Result;
+//! use chksum::sha2_256;
+//!
+//! # fn wrapper() -> Result<()> {
+//! let data = String::from("String");
+//! let digest = sha2_256::chksum(data)?;
+//! assert_eq!(
+//!     digest.to_hex_lowercase(),
+//!     "44752f37272e944fd2c913a35342eaccdd1aaf189bae50676b301ab213fc5061"
+//! );
+//! # Ok(())
+//! # }
+//! ```
+//!
+//! ## File
+//!
+//! ```rust
+//! # use std::path::Path;
+//! use std::fs::File;
+//!
+//! # use chksum::Result;
+//! use chksum::sha2_256;
+//!
+//! # fn wrapper(path: &Path) -> Result<()> {
+//! let file = File::open(path)?;
+//! let digest = sha2_256::chksum(file)?;
+//! assert_eq!(
+//!     digest.to_hex_lowercase(),
+//!     "44752f37272e944fd2c913a35342eaccdd1aaf189bae50676b301ab213fc5061"
 //! );
 //! # Ok(())
 //! # }
@@ -42,62 +152,58 @@
 //!
 //! ## Directory
 //!
-//! Use [`ReadDir`](std::fs::ReadDir) as an input.
-//!
 //! ```rust
-//! # use std::fs::read_dir;
 //! # use std::path::Path;
+//! use std::fs::read_dir;
+//!
 //! # use chksum::Result;
-//! use chksum::chksum;
-//! use chksum::hash::MD5;
+//! use chksum::sha2_256;
 //!
 //! # fn wrapper(path: &Path) -> Result<()> {
-//! let dir = read_dir(path)?;
-//! let digest = chksum::<MD5, _>(dir)?;
+//! let readdir = read_dir(path)?;
+//! let digest = sha2_256::chksum(readdir)?;
 //! assert_eq!(
 //!     digest.to_hex_lowercase(),
-//!     "30672e8a0cb95ef3b0a29601f2874ba5"
+//!     "44752f37272e944fd2c913a35342eaccdd1aaf189bae50676b301ab213fc5061"
 //! );
 //! # Ok(())
 //! # }
 //! ```
 //!
-//! ## Paths
-//!
-//! Use [`&Path`](std::path::Path), [`PathBuf`](std::path::PathBuf) or [`&PathBuf`](std::path::PathBuf) as an input.
+//! ## Path
 //!
 //! ```rust
-//! # use std::path::{Path, PathBuf};
+//! # use std::path::Path;
+//! use std::path::PathBuf;
+//!
 //! # use chksum::Result;
-//! use chksum::chksum;
-//! use chksum::hash::MD5;
+//! use chksum::sha2_256;
 //!
 //! # fn wrapper(path: &Path) -> Result<()> {
-//! let digest = chksum::<MD5, _>(path)?;
+//! let path = PathBuf::from(path);
+//! let digest = sha2_256::chksum(path)?;
 //! assert_eq!(
 //!     digest.to_hex_lowercase(),
-//!     "0bccc59d6997a74e1813d058aa1ad80d"
+//!     "44752f37272e944fd2c913a35342eaccdd1aaf189bae50676b301ab213fc5061"
 //! );
 //! # Ok(())
 //! # }
 //! ```
 //!
-//! ## Stdin
-//!
-//! Use [`StdinLock`](std::io::StdinLock) as an input.
+//! ## Standard Input
 //!
 //! ```rust
-//! # use std::io::stdin;
+//! use std::io::stdin;
+//!
 //! # use chksum::Result;
-//! use chksum::chksum;
-//! use chksum::hash::MD5;
+//! use chksum::sha2_256;
 //!
 //! # fn wrapper() -> Result<()> {
-//! let handle = stdin().lock();
-//! let digest = chksum::<MD5, _>(handle)?;
+//! let stdin = stdin();
+//! let digest = sha2_256::chksum(stdin)?;
 //! assert_eq!(
 //!     digest.to_hex_lowercase(),
-//!     "e91509789cba933399182e6a8864bdd8"
+//!     "44752f37272e944fd2c913a35342eaccdd1aaf189bae50676b301ab213fc5061"
 //! );
 //! # Ok(())
 //! # }
@@ -107,20 +213,19 @@
 //!
 //! ## MD5
 //!
-//! Use [`MD5`](hash::MD5) struct to calculate MD5 digest.
-//!
 //! ```rust
-//! # use std::fs::File;
 //! # use std::path::Path;
+//! use std::fs::File;
+//!
 //! # use chksum::Result;
-//! use chksum::chksum;
-//! use chksum::hash::MD5;
+//! use chksum::md5;
 //!
 //! # fn wrapper(path: &Path) -> Result<()> {
-//! let digest = chksum::<MD5, _>(path)?;
+//! let file = File::open(path)?;
+//! let digest = md5::chksum(file)?;
 //! assert_eq!(
 //!     digest.to_hex_lowercase(),
-//!     "3081d73d94e101bfa7bf39a3ef7351e9"
+//!     "5c71dbb287630d65ca93764c34d9aa0d"
 //! );
 //! # Ok(())
 //! # }
@@ -128,481 +233,218 @@
 //!
 //! ## SHA-1
 //!
-//! Use [`SHA1`](hash::SHA1) struct to calculate SHA-1 digest.
-//!
 //! ```rust
-//! # use std::fs::File;
 //! # use std::path::Path;
+//! use std::fs::File;
+//!
 //! # use chksum::Result;
-//! use chksum::chksum;
-//! use chksum::hash::SHA1;
+//! use chksum::sha1;
 //!
 //! # fn wrapper(path: &Path) -> Result<()> {
-//! let digest = chksum::<SHA1, _>(path)?;
+//! let file = File::open(path)?;
+//! let digest = sha1::chksum(file)?;
 //! assert_eq!(
 //!     digest.to_hex_lowercase(),
-//!     "d2b8d92228efb73147151566f059d1cace37046e"
+//!     "9fc42adac31303d68b444e6129f13f6093a0e045"
 //! );
 //! # Ok(())
 //! # }
 //! ```
 //!
-//! ## SHA-2
-//!
-//! ### SHA-2 224
-//!
-//! Use [`SHA2_224`](hash::SHA2_224) struct to calculate SHA-2 224 digest.
+//! ## SHA-2 224
 //!
 //! ```rust
-//! # use std::fs::File;
 //! # use std::path::Path;
+//! use std::fs::File;
+//!
 //! # use chksum::Result;
-//! use chksum::chksum;
-//! use chksum::hash::SHA2_224;
+//! use chksum::sha2_224;
 //!
 //! # fn wrapper(path: &Path) -> Result<()> {
-//! let digest = chksum::<SHA2_224, _>(path)?;
+//! let file = File::open(path)?;
+//! let digest = sha2_224::chksum(file)?;
 //! assert_eq!(
 //!     digest.to_hex_lowercase(),
-//!     "cfa726b42c9ef788e99eb81e4dce181763feac230485dde49dba717a"
+//!     "90382cbfda2656313ad61fd74b32ddfa4bcc118f660bd4fba9228ced"
 //! );
 //! # Ok(())
 //! # }
 //! ```
 //!
-//! ### SHA-2 256
-//!
-//! Use [`SHA2_256`](hash::SHA2_256) struct to calculate SHA-2 256 digest.
+//! ## SHA-2 256
 //!
 //! ```rust
-//! # use std::fs::File;
 //! # use std::path::Path;
+//! use std::fs::File;
+//!
 //! # use chksum::Result;
-//! use chksum::chksum;
-//! use chksum::hash::SHA2_256;
+//! use chksum::sha2_256;
 //!
 //! # fn wrapper(path: &Path) -> Result<()> {
-//! let digest = chksum::<SHA2_256, _>(path)?;
+//! let file = File::open(path)?;
+//! let digest = sha2_256::chksum(file)?;
 //! assert_eq!(
 //!     digest.to_hex_lowercase(),
-//!     "10a0933e11c86746636370a913ba9be34bc2ac2871585cb0e573c354e7116772"
+//!     "44752f37272e944fd2c913a35342eaccdd1aaf189bae50676b301ab213fc5061"
 //! );
 //! # Ok(())
 //! # }
 //! ```
 //!
-//! ### SHA-2 384
-//!
-//! Use [`SHA2_384`](hash::SHA2_384) struct to calculate SHA-2 384 digest.
+//! ## SHA-2 384
 //!
 //! ```rust
-//! # use std::fs::File;
 //! # use std::path::Path;
+//! use std::fs::File;
+//!
 //! # use chksum::Result;
-//! use chksum::chksum;
-//! use chksum::hash::SHA2_384;
+//! use chksum::sha2_384;
 //!
 //! # fn wrapper(path: &Path) -> Result<()> {
-//! let digest = chksum::<SHA2_384, _>(path)?;
+//! let file = File::open(path)?;
+//! let digest = sha2_384::chksum(file)?;
 //! assert_eq!(
 //!     digest.to_hex_lowercase(),
-//!     "7d44140596271726d0e57b3f97615d615d771d48b9b62a0b9da053e68e11992fa9166795671999d036a1e2c17a60414e"
+//!     "12ecdfd463a85a301b7c29a43bf4b19cdfc6e5e86a5f40396aa6ae3368a7e5b0ed31f3bef2eb3071577ba610b4ed1cb8"
 //! );
 //! # Ok(())
 //! # }
 //! ```
 //!
-//! ### SHA-2 512
-//!
-//! Use [`SHA2_512`](hash::SHA2_512) struct to calculate SHA-2 512 digest.
+//! ## SHA-2 512
 //!
 //! ```rust
-//! # use std::fs::File;
 //! # use std::path::Path;
+//! use std::fs::File;
+//!
 //! # use chksum::Result;
-//! use chksum::chksum;
-//! use chksum::hash::SHA2_512;
+//! use chksum::sha2_512;
 //!
 //! # fn wrapper(path: &Path) -> Result<()> {
-//! let digest = chksum::<SHA2_512, _>(path)?;
+//! let file = File::open(path)?;
+//! let digest = sha2_512::chksum(file)?;
 //! assert_eq!(
 //!     digest.to_hex_lowercase(),
-//!     "6bf5a2ab9e922a5723a937acd2b8afa685d20c1f9f16d435fce8c7fd41c3425bbed990bb0a16124f2b62147cd4342496769b789e7186a0e2d85dafc1e5dc626b"
+//!     "ed59c5759a9ece516cec0c0623142d0e9fe70a27d750eee7fd38f4550d50addd873d0fa1a51fc823c1e3d5cada203f4a05d8325caacb7d3e0727a701f3f07e5f"
 //! );
 //! # Ok(())
 //! # }
 //! ```
 //!
-//! # Feature flags
+//! # Features
 //!
 //! ## Algorithms
 //!
-//! * `md5`: Enables MD5 hash algorithm.
-//! * `sha1`: Enables SHA-1 hash algorithm.
-//! * `sha2`: Enables SHA-2 hash family algorithms.
-//!   * `sha2-224`: Enables only SHA-2 224 hash algorithm.
-//!   * `sha2-256`: Enables only SHA-2 256 hash algorithm.
-//!   * `sha2-384`: Enables only SHA-2 384 hash algorithm.
-//!   * `sha2-512`: Enables only SHA-2 512 hash algorithm.
+//! Cargo features are utilized to enable or disable specific hash algorithms.
 //!
-//! By default all of them are enabled.
+//! * `md5` enables MD5, accessible via the [`md5`] module.
+//! * `sha1` enables SHA-1, accessible via the [`sha1`] module.
+//! * `sha2-224` enables SHA-2 224, accessible via the [`sha2_224`] module.
+//! * `sha2-256` enables SHA-2 256, accessible via the [`sha2_256`] module.
+//! * `sha2-384` enables SHA-2 384, accessible via the [`sha2_384`] module.
+//! * `sha2-512` enables SHA-2 512, accessible via the [`sha2_512`] module.
 //!
-//! ## Compilation
+//! By default, all of these features are enabled.
 //!
-//! * `unstable`: Enables unstable options (like build script).
+//! To customize your setup, disable the default features and enable only those that you need in your `Cargo.toml` file:
 //!
-//! By default none of them are enabled.
+//! ```toml
+//! [dependencies]
+//! chksum = { version = "0.3.0", default-features = false, features = ["sha1", "sha2-256", "sha2-512"] }
+//! ```
+//!
+//! Alternatively, you can use the [`cargo add`](https://doc.rust-lang.org/cargo/commands/cargo-add.html) subcommand:
+//!
+//! ```shell
+//! cargo add chksum --no-default-features --features sha1,sha2-256,sha2-512
+//! ```
+//!
+//! ## Extra Options
+//!
+//! Cargo features are also utilized to enable extra options.
+//!
+//! * `reader` enables the `reader` module with the `Reader` struct within each variant module.
+//! * `writer` enables the `writer` module with the `Writer` struct within each variant module.
+//!
+//! By default, neither of these features is enabled.
+//!
+//! To customize your setup, disable the default features and enable only those that you need in your `Cargo.toml` file:
+//!
+//! ```toml
+//! [dependencies]
+//! chksum = { version = "0.3.0", features = ["reader", "writer"] }
+//! ```
+//!
+//! Alternatively, you can use the [`cargo add`](https://doc.rust-lang.org/cargo/commands/cargo-add.html) subcommand:
+//!
+//! ```shell
+//! cargo add chksum --features reader,writer
+//! ```
 //!
 //! # License
 //!
-//! MIT
+//! This crate is licensed under the MIT License.
 
 #![cfg_attr(docsrs, feature(doc_auto_cfg))]
 #![forbid(unsafe_code)]
 
-pub(crate) mod directory;
-pub(crate) mod error;
-pub(crate) mod path;
-pub(crate) mod read;
-
-use std::fs::{DirEntry, File, ReadDir};
-use std::io::{Stdin, StdinLock};
-use std::path::{Path, PathBuf};
-use std::result;
-
-pub use chksum_hash as hash;
-use is_terminal::IsTerminal;
-
-use crate::directory::{DirEntryChksumer, ReadDirChksumer};
-pub use crate::error::{Error, Result};
-use crate::hash::Update;
-use crate::path::PathChksumer;
-use crate::read::ReadChksumer;
-
-/// A trait for objects which are able to calculate checksum of given input.
-pub trait Chksum<T>: Update {
-    /// The type of the returned error.
-    type Error;
-
-    /// Calculates checksum of given input.
-    ///
-    /// Check [`chksum`] function for more details.
-    #[inline]
-    fn chksum(data: T) -> result::Result<Self::Digest, Self::Error> {
-        let args = Args::default();
-        Self::chksum_with(data, &args)
-    }
-
-    #[doc(hidden)] // TODO: create documentation
-    fn chksum_with(data: T, args: &Args) -> result::Result<Self::Digest, Self::Error>;
-}
-
-impl<T> Chksum<DirEntry> for T
-where
-    T: Default + Update,
-{
-    type Error = Error;
-
-    #[inline]
-    fn chksum_with(data: DirEntry, args: &Args) -> result::Result<Self::Digest, Self::Error> {
-        let hash = Self::default();
-        let DirEntryChksumer { hash, .. } = DirEntryChksumer { hash, args }.update(data)?;
-        let digest = hash.digest();
-        Ok(digest)
-    }
-}
-
-impl<T> Chksum<File> for T
-where
-    T: Default + Update,
-{
-    type Error = Error;
-
-    #[inline]
-    fn chksum_with(data: File, args: &Args) -> result::Result<Self::Digest, Self::Error> {
-        Self::chksum_with(&data, args)
-    }
-}
-
-impl<T> Chksum<&File> for T
-where
-    T: Default + Update,
-{
-    type Error = Error;
-
-    #[inline]
-    fn chksum_with(data: &File, args: &Args) -> result::Result<Self::Digest, Self::Error> {
-        if data.is_terminal() {
-            return Err(Error::IsTerminal);
-        }
-        let hash = Self::default();
-        let ReadChksumer { hash, .. } = ReadChksumer { hash, args }.update(data)?;
-        let digest = hash.digest();
-        Ok(digest)
-    }
-}
-
-impl<T> Chksum<&Path> for T
-where
-    T: Default + Update,
-{
-    type Error = Error;
-
-    #[inline]
-    fn chksum_with(data: &Path, args: &Args) -> result::Result<Self::Digest, Self::Error> {
-        let hash = Self::default();
-        let PathChksumer { hash, .. } = PathChksumer { hash, args }.update(data)?;
-        let digest = hash.digest();
-        Ok(digest)
-    }
-}
-
-impl<T> Chksum<PathBuf> for T
-where
-    T: Default + Update,
-{
-    type Error = Error;
-
-    #[inline]
-    fn chksum_with(data: PathBuf, args: &Args) -> result::Result<Self::Digest, Self::Error> {
-        Self::chksum_with(&data, args)
-    }
-}
-
-impl<T> Chksum<&PathBuf> for T
-where
-    T: Default + Update,
-{
-    type Error = Error;
-
-    #[inline]
-    fn chksum_with(data: &PathBuf, args: &Args) -> result::Result<Self::Digest, Self::Error> {
-        Self::chksum_with(data.as_path(), args)
-    }
-}
-
-impl<T> Chksum<ReadDir> for T
-where
-    T: Default + Update,
-{
-    type Error = Error;
-
-    #[inline]
-    fn chksum_with(data: ReadDir, args: &Args) -> result::Result<Self::Digest, Self::Error> {
-        let hash = Self::default();
-        let ReadDirChksumer { hash, .. } = ReadDirChksumer { hash, args }.update(data)?;
-        let digest = hash.digest();
-        Ok(digest)
-    }
-}
-
-impl<T> Chksum<Stdin> for T
-where
-    T: Default + Update,
-{
-    type Error = Error;
-
-    #[inline]
-    fn chksum_with(data: Stdin, args: &Args) -> result::Result<Self::Digest, Self::Error> {
-        Self::chksum_with(data.lock(), args)
-    }
-}
-
-impl<'a, T> Chksum<StdinLock<'a>> for T
-where
-    T: Default + Update,
-{
-    type Error = Error;
-
-    #[inline]
-    fn chksum_with(data: StdinLock<'a>, args: &Args) -> result::Result<Self::Digest, Self::Error> {
-        if data.is_terminal() {
-            let error = Error::IsTerminal;
-            return Err(error);
-        }
-        let hash = Self::default();
-        let ReadChksumer { hash, .. } = ReadChksumer { hash, args }.update(data)?;
-        let digest = hash.digest();
-        Ok(digest)
-    }
-}
-
-#[doc(hidden)] // TODO: create documentation
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub struct ArgsBuilder {
-    pub chunk_size: Option<usize>,
-}
-
-impl ArgsBuilder {
-    #[inline]
-    #[must_use]
-    pub const fn new() -> Self {
-        let chunk_size = None;
-        Self { chunk_size }
-    }
-
-    #[inline]
-    #[must_use]
-    pub const fn chunk_size(mut self, chunk_size: usize) -> Self {
-        self.chunk_size = Some(chunk_size);
-        self
-    }
-
-    #[inline]
-    #[must_use]
-    pub const fn build(self) -> Args {
-        let Self { chunk_size } = self;
-        Args { chunk_size }
-    }
-}
-
-impl Default for ArgsBuilder {
-    #[inline]
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-#[doc(hidden)] // TODO: create documentation
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub struct Args {
-    pub chunk_size: Option<usize>,
-}
-
-impl Args {
-    #[must_use]
-    pub const fn new() -> Self {
-        let chunk_size = None;
-        Self { chunk_size }
-    }
-}
-
-impl Default for Args {
-    #[inline]
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-/// Internal trait to implement different checksumers.
-pub(crate) trait Chksumer<T>
-where
-    Self: Sized,
-{
-    /// Error type returned when something wrong happened.
-    type Error;
-
-    /// Update checksumer with incoming data.
-    fn update(self, data: T) -> result::Result<Self, Self::Error>;
-}
-
-/// Calculates checksum of given input.
-///
-/// # Examples
-///
-/// Choose preferred hash algorithm.
-///
-/// ```rust
-/// # use std::fs::File;
-/// # use std::path::Path;
-/// # use chksum::Result;
-/// use chksum::chksum;
-/// use chksum::hash::{MD5, SHA1, SHA2_224};
-///
-/// # fn wrapper_md5(path: &Path) -> Result<()> {
-/// let file = File::open(path)?;
-/// let digest = chksum::<MD5, _>(file)?;
-/// assert_eq!(
-///     digest.to_hex_lowercase(),
-///     "91de52cc35ec212a8f406ce89ca28a95"
-/// );
-/// # Ok(())
-/// # }
-///
-/// // or
-///
-/// # fn wrapper_sha1(path: &Path) -> Result<()> {
-/// let file = File::open(path)?;
-/// let digest = chksum::<SHA1, _>(file)?;
-/// assert_eq!(
-///     digest.to_hex_lowercase(),
-///     "399445db3210104118c24061d73900e3d6f3af53"
-/// );
-/// # Ok(())
-/// # }
-///
-/// // or
-///
-/// # fn wrapper_sha2_224(path: &Path) -> Result<()> {
-/// let file = File::open(path)?;
-/// let digest = chksum::<SHA2_224, _>(file)?;
-/// assert_eq!(
-///     digest.to_hex_lowercase(),
-///     "15b4f8536af87424871a8e89d1193a3bd759b2306ea0bc5007f2105b"
-/// );
-/// # Ok(())
-/// # }
-/// ```
-///
-/// You can use different types as an input.
-///
-/// ```rust
-/// # use std::fs::{read_dir, File};
-/// # use std::path::{Path, PathBuf};
-/// # use chksum::Result;
-/// use chksum::chksum;
-/// use chksum::hash::{SHA2_224, SHA2_256, SHA2_384};
-///
-/// # fn wrapper_file(path: &Path) -> Result<()> {
-/// // use File as an input
-/// let file = File::open(path)?;
-/// let digest = chksum::<SHA2_224, _>(file)?;
-/// assert_eq!(
-///     digest.to_hex_lowercase(),
-///     "a657747d15c24a9998186a5798284f1ee2621c4591f766709b4e616d"
-/// );
-/// # Ok(())
-/// # }
-///
-/// // or
-///
-/// # fn wrapper_read_dir(path: &Path) -> Result<()> {
-/// // use ReadDir as an input
-/// let dir = read_dir(path)?;
-/// let digest = chksum::<SHA2_256, _>(dir)?;
-/// assert_eq!(
-///     digest.to_hex_lowercase(),
-///     "6c671fec2a733e1275c8e8cb4eb025b13d433cde3d31f6d61e7a216a6d853cb0"
-/// );
-/// # Ok(())
-/// # }
-///
-/// // or
-///
-/// # fn wrapper_path(path: &Path) -> Result<()> {
-/// // use PathBuf as an input
-/// let path = PathBuf::from(path);
-/// let digest = chksum::<SHA2_384, _>(path)?;
-/// assert_eq!(
-///     digest.to_hex_lowercase(),
-///     "701e7356774cb7d22d89a0843250c555bf5318f2546f2b64e6a62d22b2ce9a8acda618109eb95683605b97c37fc9ae0e"
-/// );
-/// # Ok(())
-/// # }
-/// ```
-#[inline]
-pub fn chksum<T, U>(data: U) -> result::Result<T::Digest, T::Error>
-where
-    T: Chksum<U>,
-{
-    T::chksum(data)
-}
-
-#[doc(hidden)] // TODO: create documentation
-#[inline]
-pub fn chksum_with<T, U>(data: U, args: &Args) -> result::Result<T::Digest, T::Error>
-where
-    T: Chksum<U>,
-{
-    T::chksum_with(data, args)
-}
+#[doc(no_inline)]
+pub use chksum_core::{chksum, hash, Chksumable, Digest, Error, Hash, Hashable, Result};
+#[cfg(docsrs)]
+use chksum_hash;
+#[cfg(feature = "md5")]
+#[doc(no_inline)]
+pub use chksum_md5 as md5;
+#[cfg(feature = "md5")]
+#[doc(no_inline)]
+pub use chksum_md5::MD5;
+#[cfg(feature = "reader")]
+#[doc(no_inline)]
+pub use chksum_reader as reader;
+#[cfg(feature = "reader")]
+#[doc(no_inline)]
+pub use chksum_reader::Reader;
+#[cfg(feature = "sha1")]
+#[doc(no_inline)]
+pub use chksum_sha1 as sha1;
+#[cfg(feature = "sha1")]
+#[doc(no_inline)]
+pub use chksum_sha1::SHA1;
+#[cfg(any(
+    feature = "sha2-224",
+    feature = "sha2-256",
+    feature = "sha2-384",
+    feature = "sha2-512",
+))]
+#[doc(no_inline)]
+pub use chksum_sha2 as sha2;
+#[cfg(feature = "sha2-224")]
+#[doc(no_inline)]
+pub use chksum_sha2::sha2_224;
+#[cfg(feature = "sha2-256")]
+#[doc(no_inline)]
+pub use chksum_sha2::sha2_256;
+#[cfg(feature = "sha2-384")]
+#[doc(no_inline)]
+pub use chksum_sha2::sha2_384;
+#[cfg(feature = "sha2-512")]
+#[doc(no_inline)]
+pub use chksum_sha2::sha2_512;
+#[cfg(feature = "sha2-224")]
+#[doc(no_inline)]
+pub use chksum_sha2::SHA2_224;
+#[cfg(feature = "sha2-256")]
+#[doc(no_inline)]
+pub use chksum_sha2::SHA2_256;
+#[cfg(feature = "sha2-384")]
+#[doc(no_inline)]
+pub use chksum_sha2::SHA2_384;
+#[cfg(feature = "sha2-512")]
+#[doc(no_inline)]
+pub use chksum_sha2::SHA2_512;
+#[cfg(feature = "writer")]
+#[doc(no_inline)]
+pub use chksum_writer as writer;
+#[cfg(feature = "writer")]
+#[doc(no_inline)]
+pub use chksum_writer::Writer;

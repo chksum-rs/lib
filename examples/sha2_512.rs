@@ -1,8 +1,7 @@
 use std::env;
 use std::path::PathBuf;
 
-use chksum::hash::SHA2_512;
-use chksum::{chksum, Result};
+use chksum::{chksum, Result, SHA2_512};
 
 fn main() -> Result<()> {
     // Skip the first argument because it is not necessary to calculate digest of the binary itself
@@ -11,7 +10,7 @@ fn main() -> Result<()> {
         let path = PathBuf::from(arg);
 
         // Calculate digest
-        let digest = chksum::<SHA2_512, _>(&path)?;
+        let digest = chksum::<SHA2_512>(&path)?;
 
         // Print digest
         let path = path.display();
