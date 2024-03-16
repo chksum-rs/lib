@@ -46,13 +46,9 @@ For more usage examples, refer to the documentation available at [docs.rs](https
 
 This crate provides implementations for the following hash algorithms:
 
-* MD5
-* SHA-1
-* SHA-2
-  * SHA-2 224
-  * SHA-2 256
-  * SHA-2 384
-  * SHA-2 512
+* MD5 - [RFC 1321: The MD5 Message-Digest Algorithm](https://tools.ietf.org/html/rfc1321)
+* SHA-1 - [RFC 3174: US Secure Hash Algorithm 1 (SHA1)](https://tools.ietf.org/html/rfc3174)
+* SHA-2 family (SHA-224, SHA-256, SHA-386, SHA-512) - [FIPS PUB 180-4: Secure Hash Standard](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf)
 
 ## License
 
