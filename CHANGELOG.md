@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Updated links to hash algorithm specifications.
+- Updated year range in `LICENSE`.
 
 ## [0.3.0] - 2023-12-21
 
