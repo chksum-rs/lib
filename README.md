@@ -50,6 +50,31 @@ This crate provides implementations for the following hash algorithms:
 * SHA-1 - [RFC 3174: US Secure Hash Algorithm 1 (SHA1)](https://tools.ietf.org/html/rfc3174)
 * SHA-2 family (SHA-224, SHA-256, SHA-386, SHA-512) - [FIPS PUB 180-4: Secure Hash Standard](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf)
 
+## Features
+
+### Algorithms
+
+Cargo features are utilized to enable or disable specific hash algorithms.
+
+* `md5`: Enables MD5 hash algorithm.
+* `sha1`: Enables SHA-1 hash algorithm.
+* `sha2`: Enables SHA-2 hash family algorithms.
+  * `sha2-224`: Enables only SHA-2 224 hash algorithm.
+  * `sha2-256`: Enables only SHA-2 256 hash algorithm.
+  * `sha2-384`: Enables only SHA-2 384 hash algorithm.
+  * `sha2-512`: Enables only SHA-2 512 hash algorithm.
+
+By default, all of them are enabled.
+
+### Extra Options
+
+Cargo features are also utilized to enable extra options.
+
+* `reader` enables the `reader` module with the `Reader` struct within each variant module.
+* `writer` enables the `writer` module with the `Writer` struct within each variant module.
+
+By default, neither of these features is enabled.
+
 ## License
 
 This crate is licensed under the MIT License.
