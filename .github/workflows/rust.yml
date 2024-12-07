@@ -60,7 +60,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        toolchain: [1.70.0, stable, nightly]
+        toolchain: [1.74.0, stable, nightly]
     name: "Build and test (OS: Linux, Toolchain: ${{ matrix.toolchain }})"
     steps:
       - name: Repository checkout
@@ -89,7 +89,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        toolchain: [1.70.0, stable, nightly]
+        toolchain: [1.74.0, stable, nightly]
     name: "Build and test (OS: MacOS, Toolchain: ${{ matrix.toolchain }})"
     steps:
       - name: Repository checkout
@@ -118,7 +118,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        toolchain: [1.70.0, stable, nightly]
+        toolchain: [1.74.0, stable, nightly]
     name: "Build and test (OS: Windows, Toolchain: ${{ matrix.toolchain }})"
     steps:
       - name: Repository checkout
