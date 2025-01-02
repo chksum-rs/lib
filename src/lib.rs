@@ -19,7 +19,7 @@
 //!
 //! # Usage
 //!
-//! Use the [`chksum`] function with the desired algorithm to calcualate digest of file, directory and so on.
+//! Use the [`chksum`] function with the desired algorithm to calculate digest of file, directory and so on.
 //!
 //! ```rust
 //! # use std::path::Path;
@@ -408,6 +408,9 @@
 #![cfg_attr(docsrs, feature(doc_auto_cfg))]
 #![forbid(unsafe_code)]
 
+#[cfg(feature = "async-runtime-tokio")]
+#[doc(no_inline)]
+pub use chksum_core::{async_chksum, AsyncChksumable};
 #[doc(no_inline)]
 pub use chksum_core::{chksum, hash, Chksumable, Digest, Error, Hash, Hashable, Result};
 #[cfg(docsrs)]

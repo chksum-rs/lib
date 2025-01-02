@@ -27,7 +27,7 @@ cargo add chksum
 
 ## Usage
 
-Use the `chksum` function with the desired algorithm to calcualate digest of file, directory and so on.
+Use the `chksum` function with the desired algorithm to calculate digest of file, directory and so on.
 
 ```rust
 use chksum::{chksum, SHA2_256};

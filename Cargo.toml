@@ -16,13 +16,16 @@ all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
 
 [dependencies]
-chksum-core = "0.0.0"
+chksum-core = "0.1.0"
 chksum-hash = { version = "0.5.0", default-features = false }
-chksum-md5 = { version = "0.0.0", optional = true }
-chksum-sha1 = { version = "0.0.0", optional = true }
-chksum-sha2 = { version = "0.0.0", default-features = false, optional = true }
-chksum-reader = { version = "0.0.0", optional = true }
-chksum-writer = { version = "0.0.0", optional = true }
+chksum-md5 = { version = "0.1.0", optional = true }
+chksum-sha1 = { version = "0.1.0", optional = true }
+chksum-sha2 = { version = "0.1.0", default-features = false, optional = true }
+chksum-reader = { version = "0.1.0", optional = true }
+chksum-writer = { version = "0.1.0", optional = true }
+
+[dev-dependencies]
+tokio = { version = "1.37.0", features = ["macros", "rt", "rt-multi-thread"] }
 
 [features]
 default = [
@@ -42,3 +45,30 @@ sha2-512 = ["chksum-sha2/512", "chksum-hash/sha2-512"]
 # extra options
 reader = ["chksum-reader", "chksum-md5?/reader", "chksum-sha1?/reader", "chksum-sha2?/reader"]
 writer = ["chksum-writer", "chksum-md5?/writer", "chksum-sha1?/writer", "chksum-sha2?/writer"]
+
+# async runtimes
+async-runtime-tokio = ["chksum-core/async-runtime-tokio", "chksum-md5?/async-runtime-tokio", "chksum-sha1?/async-runtime-tokio", "chksum-sha2?/async-runtime-tokio"]
+
+[[example]]
+name = "md5-async-runtime-tokio"
+required-features = ["md5", "async-runtime-tokio"]
+
+[[example]]
+name = "sha1-async-runtime-tokio"
+required-features = ["async-runtime-tokio"]
+
+[[example]]
+name = "sha2-224-async-runtime-tokio"
+required-features = ["async-runtime-tokio"]
+
+[[example]]
+name = "sha2-256-async-runtime-tokio"
+required-features = ["async-runtime-tokio"]
+
+[[example]]
+name = "sha2-384-async-runtime-tokio"
+required-features = ["async-runtime-tokio"]
+
+[[example]]
+name = "sha2-512-async-runtime-tokio"
+required-features = ["async-runtime-tokio"]

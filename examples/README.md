@@ -9,9 +9,9 @@ cargo run --example md5 PATH/TO/FILE
 All examples accept multiple arguments:
 
 ```shell
-$ cargo run --example sha2_224 Cargo.toml LICENSE
-Cargo.toml 96527686f8e021ece158227116caf53e071a30236dd0d62561ea41c9
-LICENSE 99258bca0d23c69388dd53412f1009132753b89459359a401a6ed158
+$ cargo run --example sha2-224 Cargo.toml LICENSE
+Cargo.toml 1d32f0503ca43a98bb377c98e38d5e26fb8ebe520ff4fc419ec43039
+LICENSE f2c3541b130a29abc5400732a573ba11a3a30a09435d3c1f15a83f77
 ```
 
 ## Limitations

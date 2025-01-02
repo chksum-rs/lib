@@ -27,7 +27,7 @@ cargo add chksum
 
 ## Usage
 
-Use the `chksum` function with the desired algorithm to calcualate digest of file, directory and so on.
+Use the `chksum` function with the desired algorithm to calculate digest of file, directory and so on.
 
 ```rust
 use chksum::{chksum, SHA2_256};
@@ -47,6 +47,43 @@ use chksum::sha2_256;
 
 let file = File::open(path)?;
 let digest = sha2_256::chksum(file)?;
+assert_eq!(
+    digest.to_hex_lowercase(),
+    "44752f37272e944fd2c913a35342eaccdd1aaf189bae50676b301ab213fc5061"
+);
+```
+
+For more usage examples, refer to the documentation available at [docs.rs](https://docs.rs/chksum/).
+
+### Asynchronous Runtime
+
+Use `async-runtime-tokio` feature to enable Tokio asynchronous runtime.
+
+```shell
+cargo add chksum --features async-runtime-tokio
+```
+
+Use the `async_chksum` function with the desired algorithm to calculate digest of file, directory and so on.
+
+```rust
+use chksum::{async_chksum, SHA2_256};
+use tokio::fs::File;
+
+let file = File::open(path)?.await;
+let digest = chksum::<SHA2_256>(file)?.await;
+assert_eq!(
+    digest.to_hex_lowercase(),
+    "44752f37272e944fd2c913a35342eaccdd1aaf189bae50676b301ab213fc5061"
+);
+```
+
+Alternatively, use the `async_chksum` function directly from the chosen hash module.
+
+```rust
+use chksum::sha2_256;
+
+let file = File::open(path)?;
+let digest = sha2_256::async_chksum(file)?;
 assert_eq!(
     digest.to_hex_lowercase(),
     "44752f37272e944fd2c913a35342eaccdd1aaf189bae50676b301ab213fc5061"
@@ -85,6 +122,12 @@ Cargo features are also utilized to enable extra options.
 
 * `reader` enables the `reader` module with the `Reader` struct within each variant module.
 * `writer` enables the `writer` module with the `Writer` struct within each variant module.
+
+By default, neither of these features is enabled.
+
+### Asynchronous Runtime
+
+* `async-runtime-tokio`: Enables async interface for Tokio runtime.
 
 By default, neither of these features is enabled.
 
