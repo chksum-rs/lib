@@ -8,7 +8,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! chksum = "0.3.0"
+//! chksum = "0.4.0"
 //! ```
 //!
 //! Alternatively, you can use the [`cargo add`](https://doc.rust-lang.org/cargo/commands/cargo-add.html) subcommand:
@@ -370,7 +370,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! chksum = { version = "0.3.0", default-features = false, features = ["sha1", "sha2-256", "sha2-512"] }
+//! chksum = { version = "0.4.0", default-features = false, features = ["sha1", "sha2-256", "sha2-512"] }
 //! ```
 //!
 //! Alternatively, you can use the [`cargo add`](https://doc.rust-lang.org/cargo/commands/cargo-add.html) subcommand:
@@ -392,7 +392,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! chksum = { version = "0.3.0", features = ["reader", "writer"] }
+//! chksum = { version = "0.4.0", features = ["reader", "writer"] }
 //! ```
 //!
 //! Alternatively, you can use the [`cargo add`](https://doc.rust-lang.org/cargo/commands/cargo-add.html) subcommand:
