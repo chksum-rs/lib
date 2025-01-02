@@ -10,11 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added feature descriptions.
+- Added async support for Tokio runtime.
 
 ### Changed
 
 - Updated links to hash algorithm specifications.
 - Updated year range in `LICENSE`.
+- Updated MSRV to `1.74.0`.
 
 ## [0.3.0] - 2023-12-21
 
