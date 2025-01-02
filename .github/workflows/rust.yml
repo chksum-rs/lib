@@ -53,73 +53,23 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           args: --all-features -- --deny clippy::cargo
 
-  build-and-test-linux:
+  build-and-test:
     needs:
       - lint
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
         toolchain: [1.74.0, stable, nightly]
-    name: "Build and test (OS: Linux, Toolchain: ${{ matrix.toolchain }})"
-    steps:
-      - name: Repository checkout
-        uses: actions/checkout@v3
-      - name: Setup Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: ${{ matrix.toolchain }}
-          default: true
-          profile: minimal
-      - name: Run cargo build
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --all-features --verbose
-      - name: Run cargo test
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: --all-features --verbose
-
-  build-and-test-macos:
-    needs:
-      - lint
-    runs-on: macos-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        toolchain: [1.74.0, stable, nightly]
-    name: "Build and test (OS: MacOS, Toolchain: ${{ matrix.toolchain }})"
-    steps:
-      - name: Repository checkout
-        uses: actions/checkout@v3
-      - name: Setup Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: ${{ matrix.toolchain }}
-          default: true
-          profile: minimal
-      - name: Run cargo build
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --all-features --verbose
-      - name: Run cargo test
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: --all-features --verbose
-
-  build-and-test-windows:
-    needs:
-      - lint
-    runs-on: windows-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        toolchain: [1.74.0, stable, nightly]
-    name: "Build and test (OS: Windows, Toolchain: ${{ matrix.toolchain }})"
+        include:
+          - os: ubuntu-latest
+            os-name: Linux
+          - os: macos-latest
+            os-name: MacOS
+          - os: windows-latest
+            os-name: Windows
+    runs-on: ${{ matrix.os }}
+    name: "Build and test (OS: ${{ matrix.os-name }}, Toolchain: ${{ matrix.toolchain }})"
     steps:
       - name: Repository checkout
         uses: actions/checkout@v3
